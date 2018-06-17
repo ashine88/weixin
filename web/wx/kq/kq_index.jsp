@@ -19,6 +19,10 @@
     <title>辅导员功能菜单</title>
     <meta name="viewport" content="width=device-width,initial-scale=0.6,minimum-scale=0.6,maximum-scale=1,user-scalable=no" />
     <link href="css/mui.min.css" rel="stylesheet" />
+
+
+
+
 </head>
 
 <body>
