@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<!-- 操作员登录 -->
+	<package name="user" namespace="/" extends="struts-default">
+		<action name="userAction_*" class="com.tdhz.action.UsersAction" method="{1}">
+			<result name="fdy">/wx/fdy_menu.jsp</result>
+			<result name="suguan">/oy/showbuild.jsp</result>			
+			<result name="xsc">/wx/xsc_menu.jsp</result>
+			<result name="error">/wx/login.jsp</result>
+			<result name="ajax" type="stream"><!-- 计算时间-->
+				<param name="inputName">inputStream</param>
+			</result>	
+		</action>	
+	</package>
+	
+	<!-- 宿舍楼管理 -->
+	<package name="room" namespace="/" extends="struts-default">
+		<action name="roomAction_*" class="com.tdhz.action.RoomAction" method="{1}">
+			<result name="showAllfloor">/oy/showfloor.jsp</result>
+			<result name="showAllroom">/oy/showroom.jsp</result>
+			<result name="showAllper">/oy/showper.jsp</result>
+			<result name="perdetail">/oy/perdetail.jsp</result>
+			<result name="error">/oy/error.jsp</result>
+		</action>	
+	</package>
+	
+	<!-- 预警查看 -->
+	<package name="alert" namespace="/" extends="struts-default">
+		<action name="alertAction_*" class="com.tdhz.action.AlertInfoAction" method="{1}">
+			<result name="alist">/wx/fdy_warning.jsp</result>
+			<result name="xsc_alist">/wx/xsc_warning.jsp</result>	
+			<result name="findAlert" >/wx/fdy_ok.jsp</result>	
+			<result name="updateAlertReason" >/wx/fdy_addAlertReason.jsp</result>	
+			<result name="showAlert" >/wx/fdy_showAlert.jsp</result>					
+		</action>	
+	</package>
+	
+	<!-- 异常查看 -->
+	<package name="abn" namespace="/" extends="struts-default">
+		<action name="abnAction_*" class="com.tdhz.action.AbnormityAction" method="{1}">
+			<result name="alist">/wx/fdy_laterback.jsp</result>
+			<result name="error">/wx/index.jsp</result>
+			<result name="xsc_alist">/wx/xsc_laterback.jsp</result>
+			<result name="abnlist">/wx/fdy_showAbnInfo.jsp</result>	<!-- 异常 -->	
+			<result name="xsc_abnlist">/wx/xsc_showAbnInfo.jsp</result>	<!-- 异常 -->	
+		</action>	
+	</package>
+	
+	<!-- 请假管理 -->
+	<package name="leave" namespace="/" extends="struts-default">
+		<action name="leaveAction_*" class="com.tdhz.action.LeaveAction" method="{1}">
+			<result name="error">/wx/fdy_personleave.jsp</result>
+			<result name="class_error">/wx/fdy_classleave.jsp</result>
+			<result name="ok">/wx/fdy_ok.jsp</result>	
+			<result name="classleave">/wx/fdy_showAllClass.jsp</result>
+			<result name="addclassleave">/wx/fdy_classleave.jsp</result>
+			<result name="ajax" type="stream"><!-- 计算时间-->
+				<param name="inputName">inputStream</param>
+			</result>			
+		</action>	
+	</package>
+	
+	<!-- 排名管理 -->
+	<package name="rank" namespace="/" extends="struts-default">
+		<action name="rankAction_*" class="com.tdhz.action.RankAction" method="{1}">
+			<result name="assRank">/wx/fdy_assRank.jsp</result>
+			<result name="assRankByChief">/wx/xsc_assRank.jsp</result>
+		</action>	
+	</package>
+
+
+
+	<package name="manual" namespace="/" extends="struts-default">
+		<action name="manualSendAction_*" class="com.tdhz.action.ManualSendMsg" method="{1}">
+			<result name="assRank">/wx/fdy_assRank.jsp</result>
+			<result name="assRankByChief">/wx/xsc_assRank.jsp</result>
+		</action>
+	</package>
+
+
+
+	<package name="menu" namespace="/" extends="struts-default">
+		<action name="menuAction_*" class="com.tdhz.action.MenuAction" method="{1}">
+			<result name="ajax" type="stream"><!-- 计算时间-->
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+	</package>
+
+
+
+
+	<package name="kqMain" namespace="/" extends="struts-default">
+		<action name="kqMainAction_*" class="com.tdhz.action.KqMainAction" method="{1}">
+			<result name="index">/wx/kq/kq_index.jsp</result>
+		</action>
+	</package>
+
+
+</struts>

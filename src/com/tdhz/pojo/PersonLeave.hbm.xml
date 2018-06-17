@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!--描述类和表的关系 -->
+	<class name="PersonLeave" table="bs_leave_info">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<!-- 主键 -->
+		<id name="person_leave_id" column="leave_info_id" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>
+		<!-- 普通属性 -->
+		<property name="person_id" column="person_id" type="java.lang.Integer"></property>
+		<property name="begin_date" column="begin_date" type="java.lang.String"></property>
+		<property name="end_date" column="end_date" type="java.lang.String"></property>
+		<property name="leave_type" column="leave_type" type="java.lang.String"></property>
+		<property name="reason" column="reason" type="java.lang.String"></property>
+		<property name="create_date" column="create_date" type="java.lang.String"></property>
+		<property name="state" column="state" type="java.lang.Integer"></property>
+		<property name="xj_date" column="xj_date" type="java.lang.String"></property>
+		<property name="last_tg_time" column="last_tg_time" type="java.lang.String"></property>
+		<property name="make_oper" column="make_oper" type="java.lang.Integer"></property>
+		<property name="last_tg_id" column="last_tg_id" type="java.lang.Integer"></property>
+		<property name="ts" column="ts" type="java.lang.String"></property>
+	</class>
+</hibernate-mapping>

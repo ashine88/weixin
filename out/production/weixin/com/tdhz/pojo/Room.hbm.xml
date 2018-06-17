@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!--描述类和表的关系 -->
+	<class name="Room" table="Bluesky_Channel.dbo.TBCHA_ROOM">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<!-- 主键 -->
+		<id name="roomId" column="ROOMID" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>
+		<!-- 普通属性 -->
+		<property name="roomName" column="ROOMNAME" type="java.lang.String"></property>
+		<property name="fullRoomName" column="FULLROOMNAME" type="java.lang.String"></property>
+		<property name="proom" column="PROOM" type="java.lang.Integer"></property>
+		<property name="sexType" column="SEXTYPE" type="java.lang.String"></property>
+		<!-- 配置人员和楼的关系 -->
+		  <set name="perInfos" table="Bluesky_Channel.dbo.TBCHA_PERINFO" cascade="delete-orphan" inverse="true">
+			<key column="ROOM"></key>
+			<one-to-many class="PerInfo"/>
+		</set>
+		
+		<set name="uaset" table="sys_user_area" cascade="delete-orphan" inverse="true">
+			<key column="area_id"></key>
+			<one-to-many class="User_Area"/>
+		</set>
+	</class>
+</hibernate-mapping>

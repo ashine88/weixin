@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!--描述类和表的关系 -->
+	<class name="Users" table="sys_user">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<!-- 主键 -->
+		<id name="user_id" column="user_id" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>
+		<!-- 普通属性 -->
+		<property name="user_code" column="user_code" type="java.lang.String"></property>
+		<property name="user_name" column="user_name" type="java.lang.String"></property>
+		<property name="user_password" column="user_password" type="java.lang.String"></property>
+		<property name="con_phone_no" column="con_phone_no" type="java.lang.String"></property>
+		<property name="enable" column="enable" type="java.lang.String"></property>
+		<!-- 配置管理员和微信的关系 -->
+		  <set name="weixin" table="sys_weixin" cascade="delete-orphan" inverse="true">
+			<key column="users"></key>
+			<one-to-many class="Weixin"/>
+		</set>
+		
+		
+	</class>
+</hibernate-mapping>

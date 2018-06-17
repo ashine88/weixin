@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!--描述类和表的关系 -->
+	<class name="SendLog" table="sys_sendlog">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<!-- 主键 -->
+		<id name="id" column="id" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>
+		<!-- 普通属性 -->
+		<property name="sendWX" column="sendWX" type="java.lang.Integer"></property>
+		<property name="sendSms" column="sendSms" type="java.lang.Integer"></property>
+		<property name="create_time" column="create_time" type="java.lang.String"></property>
+	</class>
+</hibernate-mapping>

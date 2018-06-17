@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>weixin1</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <!-- 加载spring配置文件 -->
+	<!-- 配置上下文初始化参数 application -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:applicationContext.xml</param-value>
+	</context-param>
+	<!-- 通过监听器加载spring配置文件 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	
+	<!-- 验证成为微信开发者 -->
+	<servlet>
+        <servlet-name>coreServlet</servlet-name>
+        <servlet-class>
+        com.tdhz.servlet.CoreServlet
+        </servlet-class>
+    </servlet>  
+    <!-- url-pattern中配置的/coreServlet用于指定该Servlet的访问路径 -->
+    <servlet-mapping>
+        <servlet-name>coreServlet</servlet-name>
+    	<url-pattern>/develop</url-pattern>
+    </servlet-mapping> 
+	
+  <servlet>
+  
+    <!-- 网页授权 -->
+    <servlet-name>OAuthServlet</servlet-name>
+    <servlet-class>com.tdhz.servlet.OAuthServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>OAuthServlet</servlet-name>
+    <url-pattern>/oauthServlet</url-pattern>
+  </servlet-mapping>
+  	
+	<!-- 配置open Session in  view -->
+	<filter>
+		<filter-name>osiv</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>osiv</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+  
+  	<!-- 配置struts核心控制器 -->
+  	<filter>
+  		<filter-name>struts</filter-name>
+  		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+  	</filter>
+  	
+  	<filter-mapping>
+  		<filter-name>struts</filter-name>
+  		<url-pattern>*.action</url-pattern>
+  		<url-pattern>*.jsp</url-pattern>
+  	</filter-mapping>  
+</web-app>

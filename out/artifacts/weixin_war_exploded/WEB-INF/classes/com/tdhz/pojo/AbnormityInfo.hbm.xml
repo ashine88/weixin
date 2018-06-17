@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!--描述类和表的关系 -->
+	<class name="AbnormityInfo" table="bs_abnormity_info">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<!-- 主键 -->
+		<id name="abnormity_id" column="abnormity_id" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>
+		<!-- 普通属性 -->
+		
+		<property name="alert_reason" column="alert_reason" type="java.lang.String"></property>
+		<property name="abn_type" column="abn_type" type="java.lang.Integer"></property>
+		<property name="alert_state" column="alert_state" type="java.lang.String"></property>
+		<property name="create_date" column="create_date" type="java.lang.String"></property>
+		<property name="check_oper" column="check_oper" type="java.lang.Integer"></property>
+		<property name="check_date" column="check_date" type="java.lang.String"></property>
+		<property name="check_reason" column="check_reason" type="java.lang.String"></property>
+		<property name="last_tg_id" column="last_tg_id" type="java.lang.Integer"></property>
+		<property name="last_tg_datetime" column="last_tg_datetime" type="java.lang.String"></property>
+		<property name="IN_OUT" column="IN_OUT" type="java.lang.String"></property>
+		<many-to-one name="person_id" class="PerInfo" column="person_id" ></many-to-one>
+	</class>
+</hibernate-mapping>

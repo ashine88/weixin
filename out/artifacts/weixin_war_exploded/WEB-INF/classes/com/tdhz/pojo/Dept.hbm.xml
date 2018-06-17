@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!-- 描述类和表的关系 -->
+	<class name="Dept" table="Bluesky_Channel.dbo.TBCHA_Dept">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<id name="deptId" column="DEPTID" type="java.lang.Integer"></id>		
+		<property name="deptName" column="DEPTNAME" type="java.lang.String"></property>
+		<property name="pdept" column="PDEPT" type="java.lang.Integer"></property>
+		<property name="fullName" column="FULLDEPTNAME" type="java.lang.String"></property>
+		<!-- 配置人员和部门的关系 -->
+		  <set name="perInfos" table="Bluesky_Channel.dbo.TBCHA_PERINFO" cascade="delete-orphan" inverse="true">
+			<key column="DEPT"></key>
+			<one-to-many class="PerInfo"/>
+		</set>
+		<set name="udset" table="sys_user_dept" cascade="delete-orphan" inverse="true">
+			<key column="dept_id"></key>
+			<one-to-many class="User_Dept"/>
+		</set>
+	</class>
+</hibernate-mapping>

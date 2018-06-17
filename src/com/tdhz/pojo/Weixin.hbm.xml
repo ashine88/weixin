@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!-- 描述类和表的关系 -->
+	<class name="Weixin" table="sys_weixin">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<id name="id" column="id" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>		
+		<property name="openid" column="openid" type="java.lang.String"></property>		
+		<many-to-one name="users" class="Users" column="users" ></many-to-one>
+		
+	</class>
+</hibernate-mapping>

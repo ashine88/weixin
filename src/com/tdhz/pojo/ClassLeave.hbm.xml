@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!--描述类和表的关系 -->
+	<class name="ClassLeave" table="bs_class_holiday_info">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<!-- 主键 -->
+		<id name="holiday_info_id" column="holiday_info_id" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>
+		<!-- 普通属性 -->
+		<property name="dept_id" column="dept_id" type="java.lang.Integer"></property>
+		<property name="begin_day" column="begin_day" type="java.lang.String"></property>
+		<property name="end_day" column="end_day" type="java.lang.String"></property>
+		<property name="holiday_type" column="holiday_type" type="java.lang.String"></property>
+		<property name="create_datetime" column="create_datetime" type="java.lang.String"></property>
+		<property name="holiday_state" column="holiday_state" type="java.lang.String"></property>
+		<property name="create_oper" column="create_oper" type="java.lang.Integer"></property>
+		
+	</class>
+</hibernate-mapping>

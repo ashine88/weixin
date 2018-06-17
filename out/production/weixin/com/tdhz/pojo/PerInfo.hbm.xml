@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!-- 描述类和表的关系 -->
+	<class name="PerInfo" table="Bluesky_Channel.dbo.TBCHA_PERINFO">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<id name="piid" column="PIID" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>
+		
+		<property name="piName" column="PINAME" type="java.lang.String"></property>
+		<property name="credNo1" column="CREDNO1" type="java.lang.String"></property>
+		<property name="lastRoomTGINOUT" column="LASTROOMTGINOUT" type="java.lang.String"></property>
+		<property name="lastRoomTGDT" column="LASTROOMTGDT" type="java.util.Date"></property>
+		
+		<many-to-one name="dept" class="Dept" column="DEPT" ></many-to-one>
+		<many-to-one name="room" class="Room" column="ROOM" ></many-to-one>
+		<set name="alertInfos" table="bs_psn_alert_info" cascade="delete-orphan" inverse="true">
+			<key column="person_id"></key>
+			<one-to-many class="AlertInfo"/>
+		</set>
+		
+		<set name="tbcha_channeltgs" table="tbcha_channeltg_14" cascade="delete-orphan" inverse="true">
+			<key column="PERINFO"></key>
+			<one-to-many class="Tbcha_channeltg_14"/>
+		</set>
+		
+		<set name="abnormityInfos" table="bs_abnormity_info" cascade="delete-orphan" inverse="true">
+			<key column="person_id"></key>
+			<one-to-many class="AbnormityInfo"/>
+		</set>
+	</class>
+</hibernate-mapping>

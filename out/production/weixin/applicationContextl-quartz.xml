@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"	
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	 http://www.springframework.org/schema/aop
+	 http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+	 http://www.springframework.org/schema/context
+	 http://www.springframework.org/schema/context/spring-context-4.1.xsd
+	 http://www.springframework.org/schema/tx
+	 http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+	 
+	 <!-- 加载外部的properties配置文件 -->
+	<context:property-placeholder location="classpath:servers.properties"/>
+	
+    <!-- 第一步: 配置好要定时调用的业务类 -->
+	<bean id="messageService" class="com.tdhz.util.MessageService" />
+   	<bean id="abnormityDao" class="com.tdhz.dao.impl.AbnormityDaoImpl" />
+   	<bean id="alertInfoDao" class="com.tdhz.dao.impl.AlertInfoDaoImpl" />
+   	<bean id="weixinDao" class="com.tdhz.dao.impl.WeixinDaoImpl" />
+   	<bean id="sendLogDao" class="com.tdhz.dao.impl.SendLogDaoImpl" />
+   <!-- 第二步: 定义好具体要使用类的哪一个业务方法 -->
+	<bean id="printTimerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 目标bean -->
+		<property name="targetObject" ref="messageService" />
+		<!-- 要执行目标bean的哪一个业务方法 -->
+		<property name="targetMethod" value="sendMsg" />
+		<!-- 是否并发 -->
+		<property name="concurrent" value="false"/>
+	</bean>
+	
+	<!-- 第三步: 定义好调用模式: 如每隔15分钟调用一次或每天的哪个时间调用一次等 -->
+	<bean id="printTimerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="printTimerJob" />		
+		<property name="cronExpression" value="${cronExpression}" />	<!-- 每天早上8点触发 ，发送微信和短信推送-->
+	</bean>
+	
+	<!--第四步 把定义好的任务放到调度（Scheduler）工厂里面,注意这里的ref bean -->
+	<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+		<property name="triggers">
+		<list>
+			<ref bean="printTimerTrigger" />
+		</list>
+		</property>
+	</bean>
+ </beans>

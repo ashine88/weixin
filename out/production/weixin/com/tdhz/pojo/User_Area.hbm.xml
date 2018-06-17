@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!-- 描述类和表的关系 -->
+	<class name="User_Area" table="sys_user_area">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<id name="user_area_id" column="user_area_id" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>		
+		<property name="user_id" column="user_id" type="java.lang.Integer"></property>				
+		<many-to-one name="area_id" class="Room" column="area_id" ></many-to-one>
+		
+	</class>
+</hibernate-mapping>
