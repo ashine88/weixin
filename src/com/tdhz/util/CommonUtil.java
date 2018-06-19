@@ -3,6 +3,7 @@ package com.tdhz.util;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.URL;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -169,4 +170,22 @@ public class CommonUtil {
 	        }
 	        return result;
 	    }
+
+
+	    public static void appendParam(StringBuilder sql, List<?> vals){
+			int size = vals.size();
+	    	for(int i = 0; i < size; i++){
+				Object v = vals.get(i);
+				String split = "";
+				if(v instanceof String){
+					split = "'";
+				}
+				if(i == size - 1){
+					sql.append( split ).append( v ).append(split);
+				}else{
+					sql.append( split ).append( v ).append(split).append(", ");
+				}
+			}
+
+		}
 }

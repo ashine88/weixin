@@ -47,4 +47,34 @@ public class LeaveServiceImpl implements LeaveService {
 		return udlist;
 	}
 
+
+	@Override
+	public List<PersonLeave> getPersonLeaveByAss(Integer userId, Integer deptId, String startTime, String endTime, List<String> leaveTypes) {
+		return leaveDao.getPersonLeaveByAss(userId, deptId, startTime, endTime, leaveTypes);
+	}
+
+	@Override
+	public List<PersonLeave> getPersonLeaveBySg(Integer userId, Integer roomId, String startTime, String endTime, List<String> leaveTypes) {
+		return leaveDao.getPersonLeaveBySg(userId, roomId, startTime, endTime, leaveTypes);
+	}
+
+	@Override
+	public int getQJBySg(Integer userId, Integer roomId, String startTime, String endTime) {
+		return leaveDao.getQJBySg(userId, roomId, startTime, endTime);
+	}
+
+	@Override
+	public int getQJByAss(Integer userId, Integer deptId, String startTime, String endTime) {
+		return leaveDao.getQJByAss(userId, deptId, startTime, endTime);
+	}
+
+	@Override
+	public int getSXBySg(Integer userId, Integer roomId, String startTime, String endTime) {
+		return leaveDao.getSXBySg(userId, roomId, startTime, endTime);
+	}
+
+	@Override
+	public int getSXByAss(Integer userId, Integer roomId, String startTime, String endTime) {
+		return leaveDao.getSXByAss(userId, roomId, startTime, endTime);
+	}
 }

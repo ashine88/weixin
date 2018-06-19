@@ -2,8 +2,11 @@ package com.tdhz.dao.impl;
 
 import java.util.List;
 
+import net.sf.json.JSONObject;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -13,7 +16,7 @@ import com.tdhz.pojo.Users;
 
 @Repository
 public class UsersDaoImpl extends HibernateDaoSupport implements UsersDao{
-	
+	public static final Logger logger = LoggerFactory.getLogger(UsersDaoImpl.class);
 	@Autowired
 	public void setSessionFactory01(SessionFactory sessionFactory){
 		super.setSessionFactory(sessionFactory);		
@@ -84,4 +87,13 @@ public class UsersDaoImpl extends HibernateDaoSupport implements UsersDao{
 					.list()	;
 	}
 
+
+	@Override
+	public Users get(Integer userId) {
+		logger.info("根据用户id查询对用的用户信息：userId={}", userId);
+		Users users = super.getHibernateTemplate().get(Users.class, userId);
+		logger.info("查询到的用户信息：user={}", JSONObject.fromObject(users).toString());
+
+		return users;
+	}
 }

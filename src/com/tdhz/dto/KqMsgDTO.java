@@ -31,40 +31,40 @@ public class KqMsgDTO {
     /**
      * 总人数
      */
-    private int total;
+    private long total;
     /**
      * 实习
      */
-    private int sx;
+    private long sx;
     /**
      * 请假
      */
-    private int qj;
+    private long qj;
     /**
      * 迟归
      */
-    private int cg;
+    private long cg;
     /**
      * 未归
      */
-    private int wg;
+    private long wg;
     /**
      * 未归报警
      */
-    private int wgbj;
+    private long wgbj;
     /**
      * 未出报警
      */
-    private int wcbj;
+    private long wcbj;
     /**
      * 在校预警
      */
-    private int zxyj;
+    private long zxyj;
 
 
     public KqMsgDTO(){}
 
-    public KqMsgDTO(String user, String time, int total, int sx, int qj, int cg, int wg, int wgbj, int wcbj, int zxyj) {
+    public KqMsgDTO(String user, String time, int total, long sx, long qj, long cg, long wg, long wgbj, long wcbj, long zxyj) {
         this.user = user;
         this.time = time;
         this.total = total;
@@ -108,7 +108,7 @@ public class KqMsgDTO {
         this.time = time;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
     public TemplateData getTotalTemplate() {
@@ -125,7 +125,7 @@ public class KqMsgDTO {
         templateData.setValue(this.getSx()+"");
         return templateData;
     }
-    public int getSx() {
+    public long getSx() {
         return sx;
     }
     public void setSx(int sx) {
@@ -137,14 +137,14 @@ public class KqMsgDTO {
         templateData.setValue(this.getQj()+"");
         return templateData;
     }
-    public int getQj() {
+    public long getQj() {
         return qj;
     }
     public void setQj(int qj) {
         this.qj = qj;
     }
 
-    public int getCg() {
+    public long getCg() {
         return cg;
     }
     public TemplateData getCgTemplate() {
@@ -162,14 +162,14 @@ public class KqMsgDTO {
         return templateData;
     }
 
-    public int getWg() {
+    public long getWg() {
         return wg;
     }
     public void setWg(int wg) {
         this.wg = wg;
     }
 
-    public int getWgbj() {
+    public long getWgbj() {
         return wgbj;
     }
     public TemplateData getWgbjTemplate() {
@@ -182,7 +182,7 @@ public class KqMsgDTO {
         this.wgbj = wgbj;
     }
 
-    public int getWcbj() {
+    public long getWcbj() {
         return wcbj;
     }
     public TemplateData getWcbjTemplate() {
@@ -196,7 +196,7 @@ public class KqMsgDTO {
         this.wcbj = wcbj;
     }
 
-    public int getZxyj() {
+    public long getZxyj() {
         return zxyj;
     }
 

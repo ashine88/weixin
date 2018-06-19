@@ -16,4 +16,13 @@ public interface PerInfoDao {
 	public Dept findpDept(Integer pdept);
 	//按照部门名称查找
 	public List<Dept> findOneDept(String deptName);
+
+	List<PerInfo> getByAss(Integer userId, Integer deptId);
+
+
+	int getCountByAss(Integer userId, Integer deptId);
+	int getCountBySg(Integer userId, Integer roomId);
+	List<PerInfo> getBySg(Integer userId, Integer roomId);
+
+
 }

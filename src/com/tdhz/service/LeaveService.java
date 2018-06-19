@@ -17,4 +17,19 @@ public interface LeaveService {
 
 	//查询辅导员负责的所有班级
 	public List<User_Dept> selectAllClass(Integer user_id);
+
+
+	public List<PersonLeave> getPersonLeaveByAss(Integer userId, Integer deptId, String startTime, String endTime, List<String> leaveTypes);
+	public List<PersonLeave> getPersonLeaveBySg(Integer userId, Integer roomId, String startTime, String endTime, List<String> leaveTypes);
+	public int getQJBySg(Integer userId, Integer roomId, String startTime, String endTime);
+	public int getQJByAss(Integer userId, Integer deptId, String startTime, String endTime);
+
+	public int getSXBySg(Integer userId, Integer roomId, String startTime, String endTime);
+	public int getSXByAss(Integer userId, Integer deptId, String startTime, String endTime);
+
+
+
+
+
+
 }

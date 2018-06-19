@@ -16,6 +16,9 @@
 		<property name="fullRoomName" column="FULLROOMNAME" type="java.lang.String"></property>
 		<property name="proom" column="PROOM" type="java.lang.Integer"></property>
 		<property name="sexType" column="SEXTYPE" type="java.lang.String"></property>
+
+		<property name="area" column="AREA" type="java.lang.Integer"></property>
+
 		<!-- 配置人员和楼的关系 -->
 		  <set name="perInfos" table="Bluesky_Channel.dbo.TBCHA_PERINFO" cascade="delete-orphan" inverse="true">
 			<key column="ROOM"></key>

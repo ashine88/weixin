@@ -30,9 +30,9 @@ public class KqMsgSender {
         String appSecret = wxMsg.getAppSecret();
         String openId = wxMsg.getOpenId();
         KqMsgDTO kqMsgDTO = wxMsg.getData();
-        logger.info("考勤消息发送：appId={}, toUser={}", appId, openId);
+        logger.info("考勤消息发送：appId={}, toUser={}", new Object[]{appId, openId});
         AccessToken token = WeixinUtil.getAccessToken(appId, appSecret);
-        logger.info("获取到的token信息：token={}, expire={}", token.getToken(), token.getExpiresIn());
+        logger.info("获取到的token信息：token={}, expire={}", new Object[]{token.getToken(), token.getExpiresIn()});
         String sendUrl = String.format(SEND_URL, token.getToken());
         WxTemplate mainTemplate = kqMsgDTO.getWxTemplate();
         mainTemplate.setUrl(wxMsg.getUrl());
@@ -43,12 +43,12 @@ public class KqMsgSender {
 
         String requestBody = JSONObject.fromObject(mainTemplate).toString();
         JSONObject responseBody = WeixinUtil.httpRequest(sendUrl, "POST", requestBody);
-        logger.info("发送消息内容：{}，响应：{}", requestBody, responseBody);
+        logger.info("发送消息内容：{}，响应：{}", new Object[]{requestBody, responseBody});
         int result = 0;
         if (null != responseBody) {
             if (0 != responseBody.getInt("errcode")) {
                 result = responseBody.getInt("errcode");
-                logger.error("错误 errcode:{} errmsg:{}", responseBody.getInt("errcode"), responseBody.getString("errmsg"));
+                logger.error("错误 errcode:{} errmsg:{}", new Object[]{responseBody.getInt("errcode"), responseBody.getString("errmsg")});
                 return false;
             }else {
                 logger.info("消息发送成功");

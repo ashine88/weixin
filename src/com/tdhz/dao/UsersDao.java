@@ -21,4 +21,11 @@ public interface UsersDao {
 	public List<Object[]> findAllAss(String sql);//查看所有辅导员
 
 	public List<Object[]> findAllAssByWX(String sql);
+
+	/**
+	 * 根据用户id查询对应的用户信息
+	 * @param userId
+	 * @return
+	 */
+	Users get(Integer userId);
 }

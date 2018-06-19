@@ -1,5 +1,6 @@
 package com.tdhz.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -22,6 +23,20 @@ public class UsersDeptDaoImpl extends HibernateDaoSupport implements UsersDeptDa
 		String hql ="from User_Dept where user_id = "+userid;
 		
 		return  (List<User_Dept>) super.getHibernateTemplate().find(hql);
+	}
+
+
+	@Override
+	public List<User_Dept> getBJ(Integer userId) {
+		List<User_Dept> all = findByUserId(userId);
+		List<User_Dept> bjs = new ArrayList<>();
+		for(User_Dept ud : all){
+			String dname = ud.getDept_id().getDeptName();
+			if(dname.endsWith("班")){
+				bjs.add(ud);
+			}
+		}
+		return bjs;
 	}
 
 }

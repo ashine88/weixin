@@ -20,4 +20,37 @@ public interface AlertInfoService {
 	public List<Object[]> findAlertByAss2(String onday, Integer userid);
 
 	public List<Object[]> findAlertByChief(String onday);
+
+
+	/**
+	 * 获取未出报警
+	 * @param userId
+	 * @param deptId
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	int getWcByAss(Integer userId, Integer deptId, String startTime, String endTime);
+
+	/**
+	 * 获取未归报警
+	 * @param userId
+	 * @param deptId
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	int getWgByAss(Integer userId, Integer deptId, String startTime, String endTime);
+
+	/**
+	 * 获取在校预警
+	 * @param userId
+	 * @param deptId
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	int getZxByAss(Integer userId, Integer deptId, String startTime, String endTime);
+
+
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.tdhz.pojo">
+	<!--描述类和表的关系 -->
+	<class name="SysParacfg" table="sys_paracfg">
+		<!-- 描述java对象属性和表的列明对应关系 -->
+		<!-- 主键 -->
+		<id name="paracfgID" column="paracfg_ID" type="java.lang.Integer">
+			<generator class="native"></generator>
+		</id>
+		<!-- 普通属性 -->		
+		<property name="paraCode" column="para_code" type="java.lang.String"></property>
+		<property name="paraValue" column="para_value" type="java.lang.String"></property>
+		<property name="dr" column="dr" type="java.lang.String"></property>
+		<property name="ts" column="ts" type="java.lang.String"></property>
+
+	</class>
+</hibernate-mapping>

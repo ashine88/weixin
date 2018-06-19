@@ -11,8 +11,9 @@ public interface AbnormityDao {
 	public List<AbnormityInfo> findLaterInfo(String onday, PageBean pe);
 	
 	public long findLaterCount(String onday);
-	 
-	public List<AbnormityInfo> findCarAbn(String onday, PageBean pe);
+
+
+    public List<AbnormityInfo> findCarAbn(String onday, PageBean pe);
 	
 	public long findCarAbnCount(String onday);
 
@@ -22,4 +23,9 @@ public interface AbnormityDao {
                                                   PageBean pe);
 
 	public List<Object[]> findLaterBackByAss(String sql);
+
+	int findAbnormityCountByAss(Integer assId, Integer deptId, String startTime, String endTime, Integer abnType);
+	List<AbnormityInfo> findAbnormityBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer abnType);
+	int findAbnormityCountBySg(Integer userId, Integer roomId, String startTime, String endTime ,Integer abnType);
+	List<AbnormityInfo> findAbnormityByAss(Integer userId, Integer deptId, String startTime, String endTime, Integer abnType);
 }

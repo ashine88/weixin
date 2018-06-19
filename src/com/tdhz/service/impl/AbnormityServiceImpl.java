@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.tdhz.util.TypeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -155,4 +156,53 @@ public class AbnormityServiceImpl implements AbnormityService {
 		return abnormityDao.findCarAbn(sql);
 	}
 
+
+	@Override
+	public List<Object> findLaterCountByAss(Integer userId, Integer deptId, String startTime, String endTime) {
+		return null;
+	}
+
+	@Override
+	public int findAbnormityCountByAss(Integer assId, Integer deptId, String startTime, String endTime, Integer abnType) {
+		return abnormityDao.findAbnormityCountBySg(assId, deptId, startTime, endTime, abnType);
+	}
+
+	@Override
+	public int findCgCountByAss(Integer assId, Integer deptId, String startTime, String endTime) {
+		return abnormityDao.findAbnormityCountBySg(assId, deptId, startTime, endTime, TypeConstant.ABN_TYPE_BACK_LATE);
+
+	}
+
+	@Override
+	public int findWgCountByAss(Integer assId, Integer deptId, String startTime, String endTime) {
+		return abnormityDao.findAbnormityCountBySg(assId, deptId, startTime, endTime, TypeConstant.ABN_TYPE_NO_BACK);
+
+	}
+
+	@Override
+	public List<AbnormityInfo> findAbnormityBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer abnType) {
+		return abnormityDao.findAbnormityBySg(userId, roomId, startTime, endTime, TypeConstant.ABN_TYPE_NO_BACK);
+	}
+
+	@Override
+	public int findAbnormityCountBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer abnType) {
+		return abnormityDao.findAbnormityCountBySg(userId, roomId, startTime, endTime,abnType);
+
+	}
+
+	@Override
+	public int findCgCountBySg(Integer userId, Integer roomId, String startTime, String endTime) {
+		return abnormityDao.findAbnormityCountBySg(userId, roomId, startTime, endTime, TypeConstant.ABN_TYPE_BACK_LATE);
+
+	}
+
+	@Override
+	public int findWgCountBySg(Integer userId, Integer roomId, String startTime, String endTime) {
+		return abnormityDao.findAbnormityCountBySg(userId, roomId, startTime, endTime, TypeConstant.ABN_TYPE_NO_BACK);
+	}
+
+	@Override
+	public List<AbnormityInfo> findAbnormityByAss(Integer userId, Integer deptId, String startTime, String endTime, Integer abnType) {
+		return abnormityDao.findAbnormityBySg(userId, deptId, startTime, endTime, abnType);
+	}
 }

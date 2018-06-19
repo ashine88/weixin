@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.tdhz.util.TypeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -146,5 +147,29 @@ public class AlertInfoServiceImpl implements AlertInfoService{
 	public List<Object[]> findAlertByChief(String onday) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public int getWcByAss(Integer userId, Integer deptId, String startTime, String endTime) {
+		int wc = alertInfoDao.findAlertCountByAss(userId, deptId, startTime, endTime, TypeConstant.ALERT_TYPE_NO_OUT);
+		log.info("获取到的未出总数：{}", wc);
+
+		return wc;
+	}
+
+	@Override
+	public int getWgByAss(Integer userId, Integer deptId, String startTime, String endTime) {
+		int wg = alertInfoDao.findAlertCountByAss(userId, deptId, startTime, endTime, TypeConstant.ALERT_TYPE_NO_BACK);
+		log.info("获取到的未出总数：{}", wg);
+		return wg;
+	}
+
+	@Override
+	public int getZxByAss(Integer userId, Integer deptId, String startTime, String endTime) {
+		int wc = alertInfoDao.findAlertCountByAss(userId, deptId, startTime, endTime, TypeConstant.ALERT_TYPE_NO_OUT);
+		log.info("获取到的未出总数：{}", wc);
+
+		return wc;
 	}
 }

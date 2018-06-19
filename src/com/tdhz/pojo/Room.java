@@ -119,6 +119,10 @@ public class Room {
 	
 	private Set<PerInfo> perInfos = new HashSet<PerInfo>();
 	private Set<User_Area> uaset = new HashSet<User_Area>();
+
+
+	private Integer area; //区域id
+
 	public Set<User_Area> getUaset() {
 		return uaset;
 	}
@@ -162,6 +166,12 @@ public class Room {
 	public void setSexType(String sexType) {
 		this.sexType = sexType;
 	}
-	
-	
+
+	public Integer getArea() {
+		return area;
+	}
+
+	public void setArea(Integer area) {
+		this.area = area;
+	}
 }

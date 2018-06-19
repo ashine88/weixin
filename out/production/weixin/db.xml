@@ -65,7 +65,8 @@
 				<value>com/tdhz/pojo/User_Area.hbm.xml</value>
 				<value>com/tdhz/pojo/Room.hbm.xml</value>
 				<value>com/tdhz/pojo/UserOperaLog.hbm.xml</value>
-				<value>com/tdhz/pojo/SendLog.hbm.xml</value>				
+				<value>com/tdhz/pojo/SendLog.hbm.xml</value>
+				<value>com/tdhz/pojo/SysParacfg.hbm.xml</value>
 			</list>		
 		</property>
 		

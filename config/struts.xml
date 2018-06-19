@@ -96,6 +96,8 @@
 	<package name="kqMain" namespace="/" extends="struts-default">
 		<action name="kqMainAction_*" class="com.tdhz.action.KqMainAction" method="{1}">
 			<result name="index">/wx/kq/kq_index.jsp</result>
+			<result name="main_search">/wx/kq/kq_main_search.jsp</result>
+			<result name="list">/wx/kq/kq_list.jsp</result>
 		</action>
 	</package>
 
