@@ -2,12 +2,14 @@ package com.tdhz.service.impl;/**
  * Created by liushuai2 on 2018/6/18.
  */
 
+import com.tdhz.dao.RoomDao;
 import com.tdhz.dao.UserAreaDao;
 import com.tdhz.dao.UsersDao;
 import com.tdhz.dto.UserRoomDTO;
 import com.tdhz.pojo.Room;
 import com.tdhz.pojo.User_Area;
 import com.tdhz.pojo.Users;
+import com.tdhz.service.RoomService;
 import com.tdhz.service.UserRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,18 +29,46 @@ public class UserRoomServivceImpl implements UserRoomService {
     private UserAreaDao userAreaDao;
     @Autowired
     private UsersDao usersDao;
+
+    private RoomDao roomDao;
+
     @Override
     public List<UserRoomDTO> get(Integer userId) {
         return null;
     }
 
+
+    @Override
+    public List<Room> getUserRoom(Integer userId){
+        List<Room> rooms = userAreaDao.getUserRoom(userId);
+        return rooms;
+    }
+
+    @Override
+    public List<UserRoomDTO> getUserRoom0(Integer userId) {
+
+        List<Room> rooms = getUserRoom(userId);
+        Users user = usersDao.get(userId);
+        List<UserRoomDTO> userRoomDTOS = new ArrayList<>();
+        for(Room room : rooms){
+            UserRoomDTO userRoomDTO = new UserRoomDTO();
+            userRoomDTO.setUserId(user.getUser_id());
+            userRoomDTO.setUserName(user.getUser_name());
+            userRoomDTO.setRoomName(room.getRoomName());
+            userRoomDTO.setFullRoomName(room.getFullRoomName());
+            userRoomDTO.setRoomId(room.getRoomId());
+            userRoomDTO.setAreaId(room.getArea());
+            userRoomDTOS.add(userRoomDTO);
+        }
+
+        return userRoomDTOS;
+    }
     @Override
     public List<UserRoomDTO> getUserApartment(Integer userId) {
         Integer proom = 1;
         List<UserRoomDTO> roomDTOS = getUserRoom(userId, proom);
         return roomDTOS;
     }
-
     @Override
     public List<UserRoomDTO> getUserRoom(Integer userId, Integer proom) {
         List<User_Area> userAreas = userAreaDao.getUserArea(userId);

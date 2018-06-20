@@ -22,6 +22,13 @@ public interface UserAreaDao {
 	public List<Object[]> findByRoomId(String sql);
 
 	public List<PerInfo> findNotBackPerByfloorId(String sql);
+
+	/**
+	 * 获取用户管理的所有寝室信息
+	 * @param roomId
+	 * @return
+	 */
+	List<Room> getUserRoom(Integer roomId);
 	
 
 }

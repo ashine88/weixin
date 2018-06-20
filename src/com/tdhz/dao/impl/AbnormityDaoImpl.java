@@ -127,7 +127,7 @@ public class AbnormityDaoImpl extends HibernateDaoSupport implements AbnormityDa
         }
 
         if(roomId != null){
-            sql.append(" and room.roomid = " + roomId);
+            sql.append(" and room.proom in  (select roomid from tbcha_room where proom = ").append(roomId).append(" ) ");
         }
         if(abnType != null){
             sql.append(" and ainfo.abn_type = " + abnType);

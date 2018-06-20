@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface KqService {
     KqMsgDTO getByAss(Integer userId, Integer deptId, String startTime, String endTime);
-    List<UserRoomDTO> getUserApartment(Integer userId);
+
     KqMsgDTO getBySg(Integer userId, Integer roomId, String startTime, String endTime);
 }

@@ -44,9 +44,9 @@ public class KqMainAction {
 
     String name;
     // 公寓
-    List<UserRoomDTO> apartments;
+    List<UserRoomDTO> rooms;
     // 班级
-    List<UserDeptDTO> classes;
+    List<UserDeptDTO> depts;
     /*
     开始时间
      */
@@ -68,7 +68,12 @@ public class KqMainAction {
 
     KqMsgDTO kqMsgDTO;
     public String index(){
-
+        if(deptId != null && deptId == -1){
+            deptId = null;
+        }
+        if(roomId != null && roomId == -1){
+            roomId = null;
+        }
         logger.info("当前查询参数：deptId：{}，roomId：{}，startTime：{}，endTime：{}", new Object[]{deptId, roomId, startTime, endTime});
 
         // 获取对应的组织机构信息
@@ -77,16 +82,18 @@ public class KqMainAction {
         HttpSession session = request.getSession();
         Integer userid = (Integer) session.getAttribute("userid");
         // 公寓管理员
-//        userid = 3;
+        userid = 3;
 
         // 辅导员
-        userid = 2;
+//        userid = 2;
         logger.info("当前登录用户信息userId={}", userid);
-        apartments = userRoomService.getUserApartment(userid);
-        if(apartments == null || apartments.size() == 0){
+        rooms = userRoomService.getUserApartment(userid);
+        if(rooms == null || rooms.size() == 0){
             logger.info("当前登录用户为行政人员，查询所管理的班级信息");
-            classes = userDeptService.getBJ(userid);
+            depts = userDeptService.getBJ(userid);
             kqMsgDTO = kqService.getByAss(userid, deptId, startTime, endTime);
+        }else{
+            kqMsgDTO = kqService.getBySg(userid, roomId, startTime, endTime);
         }
         logger.info("获取到的用户信息为：{}", JSONObject.fromObject(kqMsgDTO));
         return "index";
@@ -95,8 +102,6 @@ public class KqMainAction {
 
     public String list(){
 
-
-
         // 获取对应的组织机构信息
         //获得HttpServletRequest对象
         HttpServletRequest request= ServletActionContext.getRequest();
@@ -104,10 +109,10 @@ public class KqMainAction {
         Integer userid = (Integer) session.getAttribute("userid");
         userid = 3;
         logger.info("当前登录用户信息userId={}", userid);
-        apartments = userRoomService.getUserApartment(userid);
-        if(apartments == null || apartments.size() == 0){
+        rooms = userRoomService.getUserApartment(userid);
+        if(rooms == null || rooms.size() == 0){
             logger.info("当前登录用户为行政人员，查询所管理的班级信息");
-            classes = userDeptService.getBJ(userid);
+            depts = userDeptService.getBJ(userid);
         }
         return "list";
     }
@@ -129,22 +134,20 @@ public class KqMainAction {
         this.name = name;
     }
 
-
-    public List<UserRoomDTO> getApartments() {
-
-        return apartments;
+    public List<UserRoomDTO> getRooms() {
+        return rooms;
     }
 
-    public void setApartments(List<UserRoomDTO> apartments) {
-        this.apartments = apartments;
+    public void setRooms(List<UserRoomDTO> rooms) {
+        this.rooms = rooms;
     }
 
-    public List<UserDeptDTO> getClasses() {
-        return classes;
+    public List<UserDeptDTO> getDepts() {
+        return depts;
     }
 
-    public void setClasses(List<UserDeptDTO> classes) {
-        this.classes = classes;
+    public void setDepts(List<UserDeptDTO> depts) {
+        this.depts = depts;
     }
 
     public String getStartTime() {
@@ -179,4 +182,17 @@ public class KqMainAction {
     public void setDeptId(Integer deptId) {
         this.deptId = deptId;
     }
+
+
+    public KqMsgDTO getKqMsgDTO() {
+        return kqMsgDTO;
+    }
+
+    public void setKqMsgDTO(KqMsgDTO kqMsgDTO) {
+        this.kqMsgDTO = kqMsgDTO;
+    }
+
+
+
+
 }

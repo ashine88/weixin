@@ -98,20 +98,20 @@ public class AlertInfoDaoImpl extends HibernateDaoSupport implements AlertInfoDa
 		Object[] arr = new Object[]{userId, roomId, startTime, endTime, alertType};
 		logger.info("根据后勤人员获取对应的晚归数据：userId：{}，classId：{}，startTime：{}，endTime：{}, alertType:{}",arr );
 
-		StringBuilder sql = new StringBuilder("select ainfo.* from bs_abnormity_info ainfo " +
+		StringBuilder sql = new StringBuilder("select ainfo.* from bs_psn_alert_info ainfo " +
 				" left join tbcha_perinfo pinfo on ainfo.person_id = pinfo.piid " +
 				" left join tbcha_room room on pinfo.room = room.roomid " +
 				" left join sys_user_area ua on ua.area_id = room.area " +
 				" where 1 = 1 ");
 		if(userId != null){
-			sql.append(" ua.user_id =  " + userId);
+			sql.append(" and ua.user_id =  " + userId);
 		}
 
 		if(roomId != null){
-			sql.append(" and room.roomid = " + roomId);
+			sql.append(" and room.proom in (select roomid from tbcha_room where proom = ").append(roomId).append(" ) ");
 		}
 		if(alertType != null){
-			sql.append(" and ainfo.abn_type = " + alertType);
+			sql.append(" and ainfo.alert_type = " + alertType);
 		}
 		if(StringUtils.hasText(startTime)){
 			startTime= startTime+" 00:00:00.000";
@@ -132,7 +132,7 @@ public class AlertInfoDaoImpl extends HibernateDaoSupport implements AlertInfoDa
 	}
 
 	@Override
-	public long findAlertCountBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer alertType) {
+	public int findAlertCountBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer alertType) {
 		return findAlertBySg(userId, roomId, startTime, endTime, alertType).size();
 	}
 
@@ -143,7 +143,7 @@ public class AlertInfoDaoImpl extends HibernateDaoSupport implements AlertInfoDa
 		Object[] arr = new Object[]{userId, deptId, startTime, endTime, alertType};
 		logger.info("根据行政人员信息获取对应的晚归数据：assId：{}，deptId：{}，startTime：{}，endTime：{}, alertType:{}",arr );
 
-		StringBuilder sql = new StringBuilder("select * from bs_abnormity_info ainfo  " +
+		StringBuilder sql = new StringBuilder("select * from bs_psn_alert_info ainfo  " +
 				" left join tbcha_perinfo pinfo on ainfo.person_id = pinfo.piid " +
 				" left join sys_user_dept ud on ud.dept_id =pinfo.dept " +
 				"where 1 = 1 ") ;
@@ -154,7 +154,7 @@ public class AlertInfoDaoImpl extends HibernateDaoSupport implements AlertInfoDa
 			sql.append("and ud.dept_id = " +deptId);
 		}
 		if(alertType != null){
-			sql.append(" and ainfo.abn_type = " + alertType);
+			sql.append(" and ainfo.alert_type = " + alertType);
 		}
 		if(StringUtils.hasText(startTime)){
 			sql.append(" and ainfo.create_date >= '" + startTime +"' ");

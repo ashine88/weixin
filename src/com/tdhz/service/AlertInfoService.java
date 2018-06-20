@@ -31,6 +31,7 @@ public interface AlertInfoService {
 	 * @return
 	 */
 	int getWcByAss(Integer userId, Integer deptId, String startTime, String endTime);
+	int getWcBySg(Integer userId, Integer roomId, String startTime, String endTime);
 
 	/**
 	 * 获取未归报警
@@ -41,6 +42,7 @@ public interface AlertInfoService {
 	 * @return
 	 */
 	int getWgByAss(Integer userId, Integer deptId, String startTime, String endTime);
+	int getWgBySg(Integer userId, Integer roomId, String startTime, String endTime);
 
 	/**
 	 * 获取在校预警
@@ -52,5 +54,6 @@ public interface AlertInfoService {
 	 */
 	int getZxByAss(Integer userId, Integer deptId, String startTime, String endTime);
 
+	int getZxBySg(Integer userId, Integer roomId, String startTime, String endTime);
 
 }

@@ -1,6 +1,7 @@
 package com.tdhz.service;
 
 import com.tdhz.dto.UserRoomDTO;
+import com.tdhz.pojo.Room;
 
 import java.util.List;
 
@@ -15,6 +16,14 @@ public interface UserRoomService {
      * @return
      */
     List<UserRoomDTO> get(Integer userId);
+
+    /**
+     * 根据父roomid找到紧邻的下一级房间
+     * @param userId
+     * @return
+     */
+    List<UserRoomDTO> getUserRoom0(Integer userId);
+    List<Room> getUserRoom(Integer userId);
     /**
      * 根据用户查询所管理的公寓
      * @param userId
@@ -22,13 +31,6 @@ public interface UserRoomService {
      */
     List<UserRoomDTO> getUserApartment(Integer userId);
 
-    /**
-     * 根据父roomid找到紧邻的下一级房间
-     * @param userId
-     * @param proom
-     * @return
-     */
     List<UserRoomDTO> getUserRoom(Integer userId, Integer proom);
-
 
 }

@@ -102,11 +102,14 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 		sql.append(" left join tbcha_room room on pinfo.room = room.roomid " );
 		sql.append(" left join sys_user_area ua on ua.area_id = room.area ");
 		sql.append(" where 1 = 1 ");
+		/*
+			注意这里是公寓id
+		 */
 		if(null != userId){
 			sql.append(" and ua.user_id = " + userId);
 		}
 		if(null != roomId){
-			sql.append(" and room.roomid = " + roomId);
+			sql.append(" and room.proom in  (select roomid from tbcha_room where proom = ").append(roomId).append(" ) ");
 		}
 
 		if(StringUtils.hasText(startTime)){

@@ -36,14 +36,6 @@ public class KqServiceImpl implements KqService {
     @Autowired
     private PerInfoDao perInfoDao;
 
-    /**
-     * 获取用户所管理的公寓信息
-     * @param userId
-     * @return
-     */
-    public List<UserRoomDTO> getUserApartment(Integer userId){
-        return userRoomService.getUserApartment(userId);
-    }
 
 
     @Override
@@ -73,7 +65,27 @@ public class KqServiceImpl implements KqService {
 
     public KqMsgDTO getBySg(Integer userId, Integer roomId, String startTime, String endTime){
 
-        return null;
+        //实习人数
+        int sx = leaveService.getSXBySg(userId, roomId, startTime, endTime);
+        int qj = leaveService.getQJBySg(userId, roomId, startTime, endTime);
+        int cg = abnormityService.findCgCountBySg(userId, roomId, startTime, endTime);
+        int wg = abnormityService.findWgCountBySg(userId, roomId, startTime, endTime);
+        int wgbj = alertInfoService.getWgBySg(userId, roomId, startTime, endTime);
+
+        int wcbj = alertInfoService.getWcBySg(userId, roomId, startTime, endTime);
+        int zxyj = alertInfoService.getZxBySg(userId, roomId, startTime, endTime);
+        int total =perInfoDao.getCountBySg(userId, roomId);
+
+        KqMsgDTO kqMsgDTO = new KqMsgDTO();
+        kqMsgDTO.setSx(sx);
+        kqMsgDTO.setTotal(total);
+        kqMsgDTO.setQj(qj);
+        kqMsgDTO.setCg(cg);
+        kqMsgDTO.setWg(wg);
+        kqMsgDTO.setWgbj(wgbj);
+        kqMsgDTO.setWcbj(wcbj);
+        kqMsgDTO.setZxyj(zxyj);
+        return kqMsgDTO;
     }
 
 

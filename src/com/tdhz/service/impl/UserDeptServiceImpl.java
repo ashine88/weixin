@@ -33,6 +33,8 @@ public class UserDeptServiceImpl  implements UserDeptService {
     public List<UserDeptDTO> getBJ(Integer userId){
         List<User_Dept> user_depts = usersDeptDao.getBJ(userId);
         List<UserDeptDTO> userDeptDTOS = new ArrayList<>();
+        // 添加全部
+
         if(user_depts != null && user_depts.size() > 0 ){
             for(User_Dept ud :user_depts){
                 UserDeptDTO userDeptDTO = new UserDeptDTO();

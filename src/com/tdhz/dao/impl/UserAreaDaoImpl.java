@@ -2,8 +2,11 @@ package com.tdhz.dao.impl;
 
 import java.util.List;
 
+import com.tdhz.dao.UsersDao;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -16,7 +19,7 @@ import com.tdhz.pojo.User_Area;
 
 @Repository
 public class UserAreaDaoImpl extends HibernateDaoSupport implements UserAreaDao{
-
+	public static final Logger logger = LoggerFactory.getLogger(UserAreaDaoImpl.class);
 	@Autowired
 	public void setSessionFactory01(SessionFactory sessionFactory){
 		super.setSessionFactory(sessionFactory);		
@@ -66,4 +69,16 @@ public class UserAreaDaoImpl extends HibernateDaoSupport implements UserAreaDao{
 				
 	}
 
+
+	@Override
+	public List<Room> getUserRoom(Integer roomId) {
+
+		StringBuilder sql = new StringBuilder("select room.* from tbcha_room room ");
+		sql.append("left join sys_user_area area on room.area = area.area_id");
+		//过滤其他上级目录
+		sql.append(" and room.sextype is not null ");
+		List<Room> rooms = super.getSessionFactory().getCurrentSession().createSQLQuery(sql.toString()).addEntity(Room.class).list();
+		logger.info("根据父room获取所有房间信息 size:{}", rooms.size());
+		return null;
+	}
 }

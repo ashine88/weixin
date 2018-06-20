@@ -161,15 +161,40 @@ public class AlertInfoServiceImpl implements AlertInfoService{
 	@Override
 	public int getWgByAss(Integer userId, Integer deptId, String startTime, String endTime) {
 		int wg = alertInfoDao.findAlertCountByAss(userId, deptId, startTime, endTime, TypeConstant.ALERT_TYPE_NO_BACK);
-		log.info("获取到的未出总数：{}", wg);
+		log.info("获取到的未归总数：{}", wg);
 		return wg;
 	}
 
 	@Override
 	public int getZxByAss(Integer userId, Integer deptId, String startTime, String endTime) {
 		int wc = alertInfoDao.findAlertCountByAss(userId, deptId, startTime, endTime, TypeConstant.ALERT_TYPE_NO_OUT);
+		log.info("获取到的在校总数：{}", wc);
+
+		return wc;
+	}
+
+
+	@Override
+	public int getWcBySg(Integer userId, Integer roomId, String startTime, String endTime) {
+		int wc = alertInfoDao.findAlertCountBySg(userId, roomId, startTime, endTime,TypeConstant.ALERT_TYPE_NO_OUT);
 		log.info("获取到的未出总数：{}", wc);
 
 		return wc;
+	}
+
+	@Override
+	public int getWgBySg(Integer userId, Integer roomId, String startTime, String endTime) {
+		int wg = alertInfoDao.findAlertCountBySg(userId, roomId, startTime, endTime,TypeConstant.ALERT_TYPE_NO_BACK);
+		log.info("获取到的未归总数：{}", wg);
+
+		return wg;
+	}
+
+	@Override
+	public int getZxBySg(Integer userId, Integer roomId, String startTime, String endTime) {
+		int zx = alertInfoDao.findAlertCountBySg(userId, roomId, startTime, endTime, TypeConstant.ALERT_TYPE_NO_OUT);
+		log.info("获取到的未出总数：{}", zx);
+
+		return zx;
 	}
 }

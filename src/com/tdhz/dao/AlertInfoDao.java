@@ -31,7 +31,7 @@ public interface AlertInfoDao {
 	 */
 	List<AlertInfo> findAlertBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer alertType);
 
-	long findAlertCountBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer alertType);
+	int findAlertCountBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer alertType);
 
 
 	/**

@@ -67,7 +67,7 @@ public class PerInfoDaoImpl extends HibernateDaoSupport implements PerInfoDao{
 			sql.append(" and ud.user_id = ").append(userId);
 		}
 		if(deptId != null){
-			sql.append(" and ud.dept = ").append(deptId);
+			sql.append(" and ud.dept_id = ").append(deptId);
 		}
 
 		List<PerInfo> perInfos = super.getSessionFactory().getCurrentSession().createSQLQuery(sql.toString()).addEntity(PerInfo.class).list();
