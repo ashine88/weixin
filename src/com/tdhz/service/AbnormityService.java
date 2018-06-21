@@ -2,8 +2,11 @@ package com.tdhz.service;
 
 import java.util.List;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
 import com.tdhz.pojo.AbnormityInfo;
 import com.tdhz.pojo.Tbcha_channeltg_14;
+import com.tdhz.util.Page;
 import com.tdhz.util.PageBean;
 
 public interface AbnormityService {
@@ -53,6 +56,12 @@ public interface AbnormityService {
 	int findWgCountBySg(Integer userId, Integer roomId, String startTime, String endTime );
 
 	List<AbnormityInfo> findAbnormityByAss(Integer userId, Integer deptId, String startTime, String endTime, Integer abnType);
+
+	Page<KqDetailItemDTO> getCgDetailByAss(KqDetailReqDTO reqDTO, Page page);
+
+	Page<KqDetailItemDTO> getCgDetailBySg(KqDetailReqDTO reqDTO, Page page);
+	Page<KqDetailItemDTO> getWgDetailBySg(KqDetailReqDTO reqDTO, Page page);
+	Page<KqDetailItemDTO> getWgDetailByAss(KqDetailReqDTO reqDTO, Page page);
 
 
 }

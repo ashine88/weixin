@@ -1,28 +1,34 @@
 package com.tdhz.dao.impl;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tdhz.pojo.*;
-import com.tdhz.util.CommonUtil;
-import com.tdhz.util.TypeConstant;
+import org.hibernate.Query;
+import org.hibernate.ScrollableResults;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
-
-import com.tdhz.dao.LeaveDao;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import com.tdhz.dao.LeaveDao;
+import com.tdhz.dao.SysParacfgDao;
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
+import com.tdhz.pojo.*;
+import com.tdhz.util.CommonUtil;
+import com.tdhz.util.Page;
+import com.tdhz.util.ParaConstant;
+import com.tdhz.util.TypeConstant;
 
 @Repository
 public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 
 	private static final Logger logger = LoggerFactory.getLogger(LeaveDaoImpl.class);
+	@Autowired
+	private SysParacfgDao sysParacfgDao;
 	@Autowired
 	public void setSessionFactory01(SessionFactory sessionFactory){
 		super.setSessionFactory(sessionFactory);		
@@ -48,6 +54,170 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 		// TODO Auto-generated method stub
 		return super.getHibernateTemplate().get(Dept.class, dept_id);
 	}
+	@Override
+	public Page<KqDetailItemDTO> getPersonLeaveDetailBySg(KqDetailReqDTO reqDTO, Page page, List<String> leaveTypes){
+		/**
+		 * 公寓id
+		 */
+		Integer roomId = reqDTO.getRoomId();
+		Integer userId = reqDTO.getUserId();
+		String startTime = reqDTO.getStartTime();
+		String endTime = reqDTO.getEndTime();
+		if(page.getPageNum() == null) page.setPageNum(1);
+		if(page.getPageSize() == null) page.setPageSize(10);
+
+
+		StringBuilder fromSql = new StringBuilder("");
+
+		fromSql.append(" select pinfo.piid,")
+				.append(" pinfo.piname, ")
+				.append(" pinfo.credno1, ")
+				.append(" room.roomname as roomname,")
+				.append(" apartment.roomname as apartmentname,")
+				.append(" first_dept.deptname as classname,")
+				.append(" second_dept.deptname as collegename");
+
+		fromSql.append("    from bs_leave_info info  ")
+				.append(" left join tbcha_perinfo pinfo on info.person_id = pinfo.piid  ")
+				.append(" left join tbcha_room room on pinfo.room = room.roomid  ")
+				.append(" left join sys_user_area ua on ua.area_id = room.area ")
+				.append(" left join tbcha_room apartment_floor on room.proom = apartment_floor.roomid ")
+				.append(" left join tbcha_room apartment on apartment_floor.proom = apartment.roomid ")
+				.append(" left join tbcha_dept first_dept on pinfo.dept = first_dept.deptid ")
+				.append(" left join tbcha_dept second_dept on first_dept.pdept = second_dept.deptid ");
+		fromSql.append(" where 1 = 1");
+		if(userId != null){
+			fromSql.append(" and ua.user_id = ").append( userId );
+		}
+		if(roomId != null){
+			fromSql.append(" and apartment.roomid = ").append( roomId );
+		}
+		if(leaveTypes != null && leaveTypes.size() > 0){
+			fromSql.append(" and leave_type in(");
+			CommonUtil.appendParam(fromSql, leaveTypes);
+			fromSql.append(" ) ");
+		}
+
+		if(StringUtils.hasText(startTime)){
+			startTime= startTime+" 00:00:00.000";
+			fromSql.append(" and info.create_date >= '").append(startTime).append("'");
+		}
+		if(StringUtils.hasText(endTime)){
+			endTime = endTime +" 23:59:59.000";
+			fromSql.append(" and info.create_date <= '").append(endTime).append("'");
+		}
+		SysParacfg cfg = sysParacfgDao.get(ParaConstant.STUDENT_PSN_GROUPS);
+		String groupValue = cfg.getParaValue();
+		fromSql.append(" and pinfo.[group] in (").append(groupValue).append(")");
+
+		Query query = super.getSessionFactory().getCurrentSession().createSQLQuery(fromSql.toString());
+
+		//得到滚动结果集
+		ScrollableResults scroll = query.scroll();
+		//滚动到最后一行
+		scroll.last();
+		int countNum = scroll.getRowNumber() + 1;
+		logger.info("总计路数：{}", countNum);
+
+		//设置分页位置
+		int firstResult = (page.getPageNum() -1 ) * page.getPageSize();
+		int maxResult = page.getPageSize();
+		query.setFirstResult(firstResult);
+		query.setMaxResults(maxResult);
+
+		List<Object[]> result = query.list();
+		List<KqDetailItemDTO> items = CommonUtil.get(result);
+		System.out.println(result.size());
+		logger.info("查询到的总数为 countNum：{} ", countNum);
+		page.setTotalNum(countNum);
+		page.setItems(items);
+		return page;
+
+	}
+
+
+
+	@Override
+	public Page<KqDetailItemDTO> getPersonLeaveDetailByAss(KqDetailReqDTO reqDTO, Page page, List<String> leaveTypes){
+		/**
+		 * 公寓id
+		 */
+		Integer deptId = reqDTO.getDeptId();
+		Integer userId = reqDTO.getUserId();
+		String startTime = reqDTO.getStartTime();
+		String endTime = reqDTO.getEndTime();
+		if(page.getPageNum() == null) page.setPageNum(1);
+		if(page.getPageSize() == null) page.setPageSize(10);
+
+
+		StringBuilder fromSql = new StringBuilder("");
+
+		fromSql.append(" select pinfo.piid,")
+				.append(" pinfo.piname, ")
+				.append(" pinfo.credno1, ")
+				.append(" room.roomname as roomname,")
+				.append(" apartment.roomname as apartmentname,")
+				.append(" first_dept.deptname as classname,")
+				.append(" second_dept.deptname as collegename ");
+
+		fromSql.append("    from bs_leave_info info  ")
+				.append(" left join tbcha_perinfo pinfo on info.person_id = pinfo.piid  ")
+				.append(" left join sys_user_dept ud on ud.dept_id = pinfo.dept  ")
+				.append(" left join tbcha_dept first_dept on pinfo.dept = first_dept.deptid ")
+				.append(" left join tbcha_dept second_dept on first_dept.pdept = second_dept.deptid ")
+				.append(" left join tbcha_room room on pinfo.room = room.roomid ")
+				.append(" left join tbcha_room apartment_floor on room.proom = apartment_floor.roomid ")
+				.append(" left join tbcha_room apartment on apartment_floor.proom = apartment.roomid ");
+		fromSql.append(" where 1 = 1");
+		if(userId != null){
+			fromSql.append(" and ud.user_id = ").append( userId );
+		}
+		if(deptId != null){
+			fromSql.append(" and pinfo.deptid = ").append( deptId );
+		}
+		if(leaveTypes != null && leaveTypes.size() > 0){
+			fromSql.append(" and leave_type in(");
+			CommonUtil.appendParam(fromSql, leaveTypes);
+			fromSql.append(" ) ");
+		}
+
+		if(StringUtils.hasText(startTime)){
+			startTime= startTime+" 00:00:00.000";
+			fromSql.append(" and info.create_date >= '").append(startTime).append("'");
+		}
+		if(StringUtils.hasText(endTime)){
+			endTime = endTime +" 23:59:59.000";
+			fromSql.append(" and info.create_date <= '").append(endTime).append("'");
+		}
+		SysParacfg cfg = sysParacfgDao.get(ParaConstant.STUDENT_PSN_GROUPS);
+		String groupValue = cfg.getParaValue();
+		fromSql.append(" and pinfo.[group] in (").append(groupValue).append(")");
+
+		Query query = super.getSessionFactory().getCurrentSession().createSQLQuery(fromSql.toString());
+
+		//得到滚动结果集
+		ScrollableResults scroll = query.scroll();
+		//滚动到最后一行
+		scroll.last();
+		int countNum = scroll.getRowNumber() + 1;
+		logger.info("总计路数：{}", countNum);
+
+		//设置分页位置
+		int firstResult = (page.getPageNum() -1 ) * page.getPageSize();
+		int maxResult = page.getPageSize();
+		query.setFirstResult(firstResult);
+		query.setMaxResults(maxResult);
+
+		List<Object[]> result = query.list();
+		logger.info("查询到的总数为 countNum：{} ", countNum);
+		page.setTotalNum(countNum);
+		List<KqDetailItemDTO> items = CommonUtil.get(result);
+		page.setItems(items);
+
+		return page;
+
+	}
+
 
 
 
@@ -75,16 +245,13 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 			endTime = endTime +" 23:59:59.000";
 			sql.append(" and info.create_date <= '").append(endTime).append("'");
 		}
+		SysParacfg cfg = sysParacfgDao.get(ParaConstant.STUDENT_PSN_GROUPS);
+		String groupValue = cfg.getParaValue();
+		sql.append(" and pinfo.[group] in (").append(groupValue).append(")");
+
 		if(null != leaveTypes && leaveTypes.size() > 0){
-			int length = leaveTypes.size();
 			sql.append(" and info.leave_type in(");
-			for(int i = 0; i < length; i++){
-				if(i == length - 1){
-					sql.append("'").append(leaveTypes.get(i)).append("'");
-				}else{
-					sql.append("'").append(leaveTypes.get(i)).append("', ");
-				}
-			}
+			CommonUtil.appendParam(sql, leaveTypes);
 			sql.append(")");
 		}
 		sql.append(" and info.state = 1");
@@ -93,6 +260,9 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 		logger.info("[行政口]获取的请假总数为:{}", personLeaves.size());
 		return personLeaves;
 	}
+
+
+
 	@Override
 	public List<PersonLeave> getPersonLeaveBySg(Integer userId, Integer roomId, String startTime, String endTime, List<String> leaveTypes){
 		logger.info("[后勤口]根据条件获取个人请假信息 userId:{},roomId:{}, startTime:{} endTime:{} leaveTypes:{} ",new Object[]{userId, roomId, startTime, endTime, leaveTypes});
@@ -120,8 +290,11 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 			endTime = endTime +" 23:59:59.000";
 			sql.append(" and info.create_date <= '").append(endTime).append("'");
 		}
+		SysParacfg cfg = sysParacfgDao.get(ParaConstant.STUDENT_PSN_GROUPS);
+		String groupValue = cfg.getParaValue();
+		sql.append(" and pinfo.[group] in (").append(groupValue).append(")");
+
 		if(null != leaveTypes && leaveTypes.size() > 0){
-			int length = leaveTypes.size();
 			sql.append(" and info.leave_type in(");
 			CommonUtil.appendParam(sql, leaveTypes);
 			sql.append(")");
@@ -136,7 +309,7 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 	public int getQJByAss(Integer userId, Integer deptId, String startTime, String endTime) {
 		logger.info("[行政口]获取请假的总人数：userId:{} deptId:{} startTime:{} endTime:{}", new Object[]{userId, deptId, startTime, endTime});
 		//TODO 确定请假的leavetype
-		List<String> leaveTypes = getQjLeaveTypes();
+		List<String> leaveTypes = CommonUtil.getQjLeaveTypes();
 		List<PersonLeave> personLeaves = getPersonLeaveByAss(userId, deptId, startTime, endTime, leaveTypes);
 		int count = personLeaves.size();
 		logger.info("[行政口]获取到的请假总人数：{}", count);
@@ -148,7 +321,7 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 		logger.info("[后勤口]获取请假的总人数：userId:{} roomId:{} startTime:{} endTime:{}", new Object[]{userId, roomId, startTime, endTime});
 		//TODO 确定请假的leavetype
 
-		List<String> leaveTypes = getQjLeaveTypes();
+		List<String> leaveTypes = CommonUtil.getQjLeaveTypes();
 		List<PersonLeave> personLeaves = getPersonLeaveBySg(userId, roomId, startTime, endTime, leaveTypes);
 		int count = personLeaves.size();
 		logger.info("[后勤口]获取到的请假总人数：{}", count);
@@ -159,7 +332,7 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 	public int getSXByAss(Integer userId, Integer deptId, String startTime, String endTime) {
 		logger.info("[行政口]获取请假的总人数：userId:{} deptId:{} startTime:{} endTime:{}", new Object[]{userId, deptId, startTime, endTime});
 		//TODO 确定实习的leavetype
-		List<String> leaveTypes = getSxLeaveTypes();
+		List<String> leaveTypes = CommonUtil.getSxLeaveTypes();
 
 		List<PersonLeave> personLeaves = getPersonLeaveByAss(userId, deptId, startTime, endTime, leaveTypes);
 		int count = personLeaves.size();
@@ -171,9 +344,7 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 	public int getSXBySg(Integer userId, Integer roomId, String startTime, String endTime) {
 		logger.info("[后勤口]获取请假的总人数：userId:{} roomId:{} startTime:{} endTime:{}", new Object[]{userId, roomId, startTime, endTime});
 		//TODO 确定实习的leavetype
-		List<String> leaveTypes = new ArrayList<>();
-		// 个人请假：实习
-		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_WORK);
+		List<String> leaveTypes = CommonUtil.getSxLeaveTypes();
 
 		List<PersonLeave> personLeaves = getPersonLeaveBySg(userId, roomId, startTime, endTime, leaveTypes);
 		int count = personLeaves.size();
@@ -181,34 +352,7 @@ public class LeaveDaoImpl extends HibernateDaoSupport implements LeaveDao{
 		return count;
 	}
 
-	private List<String> getQjLeaveTypes(){
-		/**
-		 * 个人请假：病假 HOLIDAY_PERSON_ILL = "1";
 
-		 * 个人请假：事假 HOLIDAY_PERSON_ABSENCE = "2";
-		 *
-		 * 个人请假：其他 HOLIDAY_PERSON_OTHER = "4";
-		 *
-		 */
-		List<String> leaveTypes = new ArrayList<>();
-		// 病假
-		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_ILL);
-		// 事假
-		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_ABSENCE);
-		// 其他
-		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_OTHER);
-		return leaveTypes;
-	}
 
-	/**
-	 * 获取实习的leaveTypes
-	 * @return
-	 */
-	private List<String> getSxLeaveTypes(){
-		List<String> leaveTypes = new ArrayList<>();
-		// 个人请假：实习
-		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_WORK);
-		return leaveTypes;
-	}
 
 }

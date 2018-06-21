@@ -3,9 +3,12 @@ package com.tdhz.service;
 
 import java.util.List;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
 import com.tdhz.pojo.ClassLeave;
 import com.tdhz.pojo.PersonLeave;
 import com.tdhz.pojo.User_Dept;
+import com.tdhz.util.Page;
 
 public interface LeaveService {
 
@@ -27,9 +30,11 @@ public interface LeaveService {
 	public int getSXBySg(Integer userId, Integer roomId, String startTime, String endTime);
 	public int getSXByAss(Integer userId, Integer deptId, String startTime, String endTime);
 
+	Page<KqDetailItemDTO> getQJDetailByAss(KqDetailReqDTO reqDTO, Page page);
+	Page<KqDetailItemDTO> getSXDetailByAss(KqDetailReqDTO reqDTO, Page page);
 
 
-
-
+	Page<KqDetailItemDTO> getQJDetailBySg(KqDetailReqDTO reqDTO, Page page);
+	Page<KqDetailItemDTO> getSXDetailBySg(KqDetailReqDTO reqDTO, Page page);
 
 }

@@ -4,6 +4,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
+import com.tdhz.util.CommonUtil;
+import com.tdhz.util.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.tdhz.dao.LeaveDao;
@@ -15,6 +21,7 @@ import com.tdhz.service.LeaveService;
 
 @Service
 public class LeaveServiceImpl implements LeaveService {
+	public static final Logger logger = LoggerFactory.getLogger(LeaveServiceImpl.class);
 	@Resource
 	private LeaveDao leaveDao;
 
@@ -77,4 +84,43 @@ public class LeaveServiceImpl implements LeaveService {
 	public int getSXByAss(Integer userId, Integer roomId, String startTime, String endTime) {
 		return leaveDao.getSXByAss(userId, roomId, startTime, endTime);
 	}
+
+
+	@Override
+	public Page<KqDetailItemDTO> getQJDetailByAss(KqDetailReqDTO reqDTO, Page page) {
+		logger.info("【行政口】获取请假的明细");
+		//TODO 确定实习的leavetype
+		List<String> leaveTypes = CommonUtil.getSxLeaveTypes();
+		page = leaveDao.getPersonLeaveDetailByAss(reqDTO, page, leaveTypes);
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getSXDetailByAss(KqDetailReqDTO reqDTO, Page page) {
+		logger.info("【行政口】获取实习的明细");
+		//TODO 确定实习的leavetype
+		List<String> leaveTypes = CommonUtil.getSxLeaveTypes();
+		page = leaveDao.getPersonLeaveDetailByAss(reqDTO, page, leaveTypes);
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getQJDetailBySg(KqDetailReqDTO reqDTO, Page page) {
+		logger.info("【后勤口】获取请假的明细");
+		//TODO 确定实习的leavetype
+		List<String> leaveTypes = CommonUtil.getQjLeaveTypes();
+		page = leaveDao.getPersonLeaveDetailBySg(reqDTO, page, leaveTypes);
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getSXDetailBySg(KqDetailReqDTO reqDTO, Page page) {
+		logger.info("【行政口】获取实习的明细");
+		//TODO 确定实习的leavetype
+		List<String> leaveTypes = CommonUtil.getSxLeaveTypes();
+		page = leaveDao.getPersonLeaveDetailBySg(reqDTO, page, leaveTypes);
+		return page;
+	}
+
+
 }

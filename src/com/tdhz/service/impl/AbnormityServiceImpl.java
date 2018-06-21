@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
+import com.tdhz.util.Page;
 import com.tdhz.util.TypeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -204,5 +207,30 @@ public class AbnormityServiceImpl implements AbnormityService {
 	@Override
 	public List<AbnormityInfo> findAbnormityByAss(Integer userId, Integer deptId, String startTime, String endTime, Integer abnType) {
 		return abnormityDao.findAbnormityBySg(userId, deptId, startTime, endTime, abnType);
+	}
+
+
+	@Override
+	public Page<KqDetailItemDTO> getCgDetailByAss(KqDetailReqDTO reqDTO, Page page) {
+		page = abnormityDao.getAbnormityDetailByAss(reqDTO, page, TypeConstant.ABN_TYPE_BACK_LATE);
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getCgDetailBySg(KqDetailReqDTO reqDTO, Page page) {
+		page = abnormityDao.getAbnormityDetailBySg(reqDTO, page, TypeConstant.ABN_TYPE_NO_BACK);
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getWgDetailBySg(KqDetailReqDTO reqDTO, Page page) {
+		page = abnormityDao.getAbnormityDetailBySg(reqDTO, page, TypeConstant.ABN_TYPE_BACK_LATE);
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getWgDetailByAss(KqDetailReqDTO reqDTO, Page page) {
+		page = abnormityDao.getAbnormityDetailByAss(reqDTO, page, TypeConstant.ABN_TYPE_NO_BACK);
+		return page;
 	}
 }

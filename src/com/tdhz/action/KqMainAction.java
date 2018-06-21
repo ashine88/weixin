@@ -2,9 +2,7 @@ package com.tdhz.action;/**
  * Created by liushuai2 on 2018/6/17.
  */
 
-import com.tdhz.dto.KqMsgDTO;
-import com.tdhz.dto.UserDeptDTO;
-import com.tdhz.dto.UserRoomDTO;
+import com.tdhz.dto.*;
 import com.tdhz.service.*;
 import net.sf.json.JSONObject;
 import org.apache.struts2.ServletActionContext;
@@ -41,6 +39,10 @@ public class KqMainAction {
     private AlertInfoService alertInfoService;
     @Autowired
     private KqService kqService;
+
+    KqDetailReqDTO detailReqDTO;
+
+    KqDetailRespDTO detailRespDTO;
 
     String name;
     // 公寓
@@ -95,6 +97,14 @@ public class KqMainAction {
         }else{
             kqMsgDTO = kqService.getBySg(userid, roomId, startTime, endTime);
         }
+        detailReqDTO = new KqDetailReqDTO();
+        detailReqDTO.setUserId(userid);
+        detailReqDTO.setOpertorType(1);
+        kqService.getDetail(detailReqDTO);
+
+
+
+
         logger.info("获取到的用户信息为：{}", JSONObject.fromObject(kqMsgDTO));
         return "index";
     }
@@ -107,7 +117,11 @@ public class KqMainAction {
         HttpServletRequest request= ServletActionContext.getRequest();
         HttpSession session = request.getSession();
         Integer userid = (Integer) session.getAttribute("userid");
+        // 公寓管理员
         userid = 3;
+
+        // 辅导员
+//        userid = 2;
         logger.info("当前登录用户信息userId={}", userid);
         rooms = userRoomService.getUserApartment(userid);
         if(rooms == null || rooms.size() == 0){
@@ -193,6 +207,19 @@ public class KqMainAction {
     }
 
 
+    public KqDetailReqDTO getDetailReqDTO() {
+        return detailReqDTO;
+    }
 
+    public void setDetailReqDTO(KqDetailReqDTO detailReqDTO) {
+        this.detailReqDTO = detailReqDTO;
+    }
 
+    public KqDetailRespDTO getDetailRespDTO() {
+        return detailRespDTO;
+    }
+
+    public void setDetailRespDTO(KqDetailRespDTO detailRespDTO) {
+        this.detailRespDTO = detailRespDTO;
+    }
 }

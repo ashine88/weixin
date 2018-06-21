@@ -2,8 +2,11 @@ package com.tdhz.dao;
 
 import java.util.List;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
 import com.tdhz.pojo.AbnormityInfo;
 import com.tdhz.pojo.Tbcha_channeltg_14;
+import com.tdhz.util.Page;
 import com.tdhz.util.PageBean;
 
 public interface AbnormityDao {
@@ -28,4 +31,8 @@ public interface AbnormityDao {
 	List<AbnormityInfo> findAbnormityBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer abnType);
 	int findAbnormityCountBySg(Integer userId, Integer roomId, String startTime, String endTime ,Integer abnType);
 	List<AbnormityInfo> findAbnormityByAss(Integer userId, Integer deptId, String startTime, String endTime, Integer abnType);
+
+
+	Page<KqDetailItemDTO> getAbnormityDetailByAss(KqDetailReqDTO reqDTO, Page page, Integer abnType);
+	Page<KqDetailItemDTO> getAbnormityDetailBySg(KqDetailReqDTO reqDTO, Page page, Integer abnType);
 }

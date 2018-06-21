@@ -2,8 +2,12 @@ package com.tdhz.dao;
 
 import java.util.List;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
+import com.tdhz.dto.KqDetailRespDTO;
 import com.tdhz.pojo.Dept;
 import com.tdhz.pojo.PerInfo;
+import com.tdhz.util.Page;
 
 public interface PerInfoDao {
 	//按照id查询
@@ -24,5 +28,20 @@ public interface PerInfoDao {
 	int getCountBySg(Integer userId, Integer roomId);
 	List<PerInfo> getBySg(Integer userId, Integer roomId);
 
+	/**
+	 * 后勤后获取总人数
+	 * @param reqDTO
+	 * @param page
+	 * @return
+	 */
+	Page<KqDetailItemDTO> getPersonLeaveDetailBySg(KqDetailReqDTO reqDTO, Page page);
+
+	/**
+	 * 行政口获取总人数
+	 * @param reqDTO
+	 * @param page
+	 * @return
+	 */
+	Page<KqDetailItemDTO> getPersonLeaveDetailByAss(KqDetailReqDTO reqDTO, Page page);
 
 }

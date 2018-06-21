@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
+import com.tdhz.util.Page;
 import com.tdhz.util.TypeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,7 +170,7 @@ public class AlertInfoServiceImpl implements AlertInfoService{
 
 	@Override
 	public int getZxByAss(Integer userId, Integer deptId, String startTime, String endTime) {
-		int wc = alertInfoDao.findAlertCountByAss(userId, deptId, startTime, endTime, TypeConstant.ALERT_TYPE_NO_OUT);
+		int wc = alertInfoDao.findAlertCountByAss(userId, deptId, startTime, endTime, TypeConstant.ALERT_TYPE_HOLIDAY_IN);
 		log.info("获取到的在校总数：{}", wc);
 
 		return wc;
@@ -192,9 +195,52 @@ public class AlertInfoServiceImpl implements AlertInfoService{
 
 	@Override
 	public int getZxBySg(Integer userId, Integer roomId, String startTime, String endTime) {
-		int zx = alertInfoDao.findAlertCountBySg(userId, roomId, startTime, endTime, TypeConstant.ALERT_TYPE_NO_OUT);
+		int zx = alertInfoDao.findAlertCountBySg(userId, roomId, startTime, endTime, TypeConstant.ALERT_TYPE_HOLIDAY_IN);
 		log.info("获取到的未出总数：{}", zx);
 
 		return zx;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getWcDetailByAss(KqDetailReqDTO reqDTO, Page page) {
+
+		page = alertInfoDao.getAlertDetailAss(reqDTO, page, TypeConstant.ALERT_TYPE_NO_OUT);
+
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getWcDetailBySg(KqDetailReqDTO reqDTO, Page page) {
+		page = alertInfoDao.getAlertDetailSg(reqDTO, page, TypeConstant.ALERT_TYPE_NO_OUT);
+
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getWgDetailByAss(KqDetailReqDTO reqDTO, Page page) {
+		page = alertInfoDao.getAlertDetailAss(reqDTO, page, TypeConstant.ALERT_TYPE_NO_BACK);
+
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getWgDetailBySg(KqDetailReqDTO reqDTO, Page page) {
+		page = alertInfoDao.getAlertDetailSg(reqDTO, page, TypeConstant.ALERT_TYPE_NO_BACK);
+
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getZxDetailByAss(KqDetailReqDTO reqDTO, Page page) {
+		page = alertInfoDao.getAlertDetailAss(reqDTO, page, TypeConstant.ALERT_TYPE_HOLIDAY_IN);
+
+		return page;
+	}
+
+	@Override
+	public Page<KqDetailItemDTO> getZxDetailBySg(KqDetailReqDTO reqDTO, Page page) {
+		page = alertInfoDao.getAlertDetailSg(reqDTO, page, TypeConstant.ALERT_TYPE_HOLIDAY_IN);
+
+		return page;
 	}
 }

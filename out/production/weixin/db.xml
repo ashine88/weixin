@@ -38,7 +38,9 @@
 		<!-- 配置hibernate 特性-->
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+				<!--<prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>-->
+				<!-- 注意：这里我改成了sqlserver 2008的方言-->
+				<prop key="hibernate.dialect">com.tdhz.util.MySQLServer2008Dialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>

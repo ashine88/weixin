@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.tdhz.dao.SysParacfgDao;
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
 import com.tdhz.pojo.SysParacfg;
-import com.tdhz.util.CommonUtil;
-import com.tdhz.util.ParaConstant;
-import com.tdhz.util.TypeConstant;
+import com.tdhz.util.*;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
+import org.hibernate.ScrollableResults;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Repository;
 import com.tdhz.dao.AbnormityDao;
 import com.tdhz.pojo.AbnormityInfo;
 import com.tdhz.pojo.Tbcha_channeltg_14;
-import com.tdhz.util.PageBean;
 import org.springframework.util.StringUtils;
 
 @Repository
@@ -152,8 +153,163 @@ public class AbnormityDaoImpl extends HibernateDaoSupport implements AbnormityDa
         return laterResult.size();
     }
 
+    @Override
+    public Page<KqDetailItemDTO> getAbnormityDetailByAss(KqDetailReqDTO reqDTO, Page page, Integer abnType) {
+        /**
+         * 公寓id
+         */
+        Integer deptId = reqDTO.getDeptId();
+        Integer userId = reqDTO.getUserId();
+        String startTime = reqDTO.getStartTime();
+        String endTime = reqDTO.getEndTime();
+        if(page.getPageNum() == null) page.setPageNum(1);
+        if(page.getPageSize() == null) page.setPageSize(10);
 
-	//刷卡异常
+
+        StringBuilder fromSql = new StringBuilder("");
+
+        fromSql.append(" select pinfo.piid,")
+                .append(" pinfo.piname, ")
+                .append(" pinfo.credno1, ")
+                .append(" room.roomname as roomname,")
+                .append(" apartment.roomname as apartmentname,")
+                .append(" first_dept.deptname as classname,")
+                .append(" second_dept.deptname as collegename ");
+
+        fromSql.append("    from bs_abnormity_info info  ")
+                .append(" left join tbcha_perinfo pinfo on info.person_id = pinfo.piid  ")
+                .append(" left join sys_user_dept ud on ud.dept_id = pinfo.dept  ")
+                .append(" left join tbcha_dept first_dept on pinfo.dept = first_dept.deptid ")
+                .append(" left join tbcha_dept second_dept on first_dept.pdept = second_dept.deptid ")
+                .append(" left join tbcha_room room on pinfo.room = room.roomid ")
+                .append(" left join tbcha_room apartment_floor on room.proom = apartment_floor.roomid ")
+                .append(" left join tbcha_room apartment on apartment_floor.proom = apartment.roomid ");
+        fromSql.append(" where 1 = 1");
+        if(userId != null){
+            fromSql.append(" and ud.user_id = ").append( userId );
+        }
+        if(deptId != null){
+            fromSql.append(" and pinfo.deptid = ").append( deptId );
+        }
+        if(abnType != null ){
+            fromSql.append(" and ainfo.abn_type = " + abnType);
+        }
+
+        if(StringUtils.hasText(startTime)){
+            startTime= startTime+" 00:00:00.000";
+            fromSql.append(" and info.create_date >= '").append(startTime).append("'");
+        }
+        if(StringUtils.hasText(endTime)){
+            endTime = endTime +" 23:59:59.000";
+            fromSql.append(" and info.create_date <= '").append(endTime).append("'");
+        }
+        SysParacfg cfg = sysParacfgDao.get(ParaConstant.STUDENT_PSN_GROUPS);
+        String groupValue = cfg.getParaValue();
+        fromSql.append(" and pinfo.[group] in (").append(groupValue).append(")");
+
+        Query query = super.getSessionFactory().getCurrentSession().createSQLQuery(fromSql.toString());
+
+        //得到滚动结果集
+        ScrollableResults scroll = query.scroll();
+        //滚动到最后一行
+        scroll.last();
+        int countNum = scroll.getRowNumber() + 1;
+        logger.info("总计路数：{}", countNum);
+
+        //设置分页位置
+        int firstResult = (page.getPageNum() -1 ) * page.getPageSize();
+        int maxResult = page.getPageSize();
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResult);
+
+        List<Object[]> result = query.list();
+        logger.info("查询到的总数为 countNum：{} ", countNum);
+        page.setTotalNum(countNum);
+        List<KqDetailItemDTO> items = CommonUtil.get(result);
+        page.setItems(items);
+
+        return page;
+    }
+
+    @Override
+    public Page<KqDetailItemDTO> getAbnormityDetailBySg(KqDetailReqDTO reqDTO, Page page, Integer abnType) {
+        /**
+         * 公寓id
+         */
+        Integer roomId = reqDTO.getRoomId();
+        Integer userId = reqDTO.getUserId();
+        String startTime = reqDTO.getStartTime();
+        String endTime = reqDTO.getEndTime();
+        if(page.getPageNum() == null) page.setPageNum(1);
+        if(page.getPageSize() == null) page.setPageSize(10);
+
+
+        StringBuilder fromSql = new StringBuilder("");
+
+        fromSql.append(" select pinfo.piid,")
+                .append(" pinfo.piname, ")
+                .append(" pinfo.credno1, ")
+                .append(" room.roomname as roomname,")
+                .append(" apartment.roomname as apartmentname,")
+                .append(" first_dept.deptname as classname,")
+                .append(" second_dept.deptname as collegename");
+
+        fromSql.append("    from bs_abnormity_info ainfo    ")
+                .append(" left join tbcha_perinfo pinfo on ainfo.person_id = pinfo.piid  ")
+                .append(" left join tbcha_room room on pinfo.room = room.roomid  ")
+                .append(" left join sys_user_area ua on ua.area_id = room.area ")
+                .append(" left join tbcha_room apartment_floor on room.proom = apartment_floor.roomid ")
+                .append(" left join tbcha_room apartment on apartment_floor.proom = apartment.roomid ")
+                .append(" left join tbcha_dept first_dept on pinfo.dept = first_dept.deptid ")
+                .append(" left join tbcha_dept second_dept on first_dept.pdept = second_dept.deptid ");
+        fromSql.append(" where 1 = 1");
+        if(userId != null){
+            fromSql.append(" and ua.user_id = ").append( userId );
+        }
+        if(roomId != null){
+            fromSql.append(" and apartment.roomid = ").append( roomId );
+        }
+        if(abnType != null ){
+            fromSql.append(" and ainfo.abn_type = " + abnType);
+        }
+
+        if(StringUtils.hasText(startTime)){
+            startTime= startTime+" 00:00:00.000";
+            fromSql.append(" and info.create_date >= '").append(startTime).append("'");
+        }
+        if(StringUtils.hasText(endTime)){
+            endTime = endTime +" 23:59:59.000";
+            fromSql.append(" and info.create_date <= '").append(endTime).append("'");
+        }
+        SysParacfg cfg = sysParacfgDao.get(ParaConstant.STUDENT_PSN_GROUPS);
+        String groupValue = cfg.getParaValue();
+        fromSql.append(" and pinfo.[group] in (").append(groupValue).append(")");
+
+        Query query = super.getSessionFactory().getCurrentSession().createSQLQuery(fromSql.toString());
+
+        //得到滚动结果集
+        ScrollableResults scroll = query.scroll();
+        //滚动到最后一行
+        scroll.last();
+        int countNum = scroll.getRowNumber() + 1;
+        logger.info("总计路数：{}", countNum);
+
+        //设置分页位置
+        int firstResult = (page.getPageNum() -1 ) * page.getPageSize();
+        int maxResult = page.getPageSize();
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResult);
+
+        List<Object[]> result = query.list();
+        List<KqDetailItemDTO> items = CommonUtil.get(result);
+        System.out.println(result.size());
+        logger.info("查询到的总数为 countNum：{} ", countNum);
+        page.setTotalNum(countNum);
+        page.setItems(items);
+        return page;
+    }
+
+    //刷卡异常
 	@Override
 	public List<AbnormityInfo> findCarAbn(String onday, PageBean pe) {
 		//通过hibernate提供的hql语句查询

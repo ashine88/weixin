@@ -2,11 +2,14 @@ package com.tdhz.dao;
 
 import java.util.List;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
 import com.tdhz.dto.KqMsgDTO;
 import com.tdhz.pojo.ClassLeave;
 import com.tdhz.pojo.Dept;
 import com.tdhz.pojo.PersonLeave;
 import com.tdhz.pojo.User_Dept;
+import com.tdhz.util.Page;
 
 public interface LeaveDao {
 
@@ -29,5 +32,13 @@ public interface LeaveDao {
 
 	public int getSXBySg(Integer userId, Integer roomId, String startTime, String endTime);
 	public int getSXByAss(Integer userId, Integer deptId, String startTime, String endTime);
+
+
+	Page<KqDetailItemDTO> getPersonLeaveDetailByAss(KqDetailReqDTO reqDTO, Page page, List<String> leaveTypes);
+
+
+	Page<KqDetailItemDTO> getPersonLeaveDetailBySg(KqDetailReqDTO reqDTO, Page page, List<String> leaveTypes);
+
+
 
 }

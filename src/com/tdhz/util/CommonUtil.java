@@ -3,6 +3,7 @@ package com.tdhz.util;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -10,6 +11,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
+import com.tdhz.dto.KqDetailItemDTO;
 import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.tdhz.pojo.SNSUserInfo;
 import com.tdhz.pojo.WeixinOauth2Token;
+import org.springframework.util.CollectionUtils;
 
 
 public class CommonUtil {
@@ -188,4 +191,71 @@ public class CommonUtil {
 			}
 
 		}
+
+		public static List<KqDetailItemDTO> get(List<Object[]> result) {
+			/**
+			 * pinfo.piid,")
+			 .append(" pinfo.piname, ")
+			 .append(" pinfo.credno1, ")
+			 .append(" room.roomname as roomname,")
+			 .append(" apartment.roomname as apartmentname,")
+			 .append(" first_dept.deptname as classname,")
+			 .append(" second_dept.deptname as collegename");
+			 */
+			List<KqDetailItemDTO> items = new ArrayList<>();
+			if (!CollectionUtils.isEmpty(result)) {
+				for (Object[] vals : result) {
+					int i = 0;
+					Integer piid = (Integer) vals[i];
+					String piname = (String) vals[i++];
+					String credno1 = (String) vals[i++];
+					String roomname = (String) vals[i++];
+					String apartmentname = (String) vals[i++];
+					String classname = (String) vals[i++];
+					String collegename = (String) vals[i++];
+					log.info("查询到的具体信息 piid:{} piname:{} credno1:{} roomname:{} apartmentname:{} classname:{} collegename:{} ",
+							new Object[]{piid, piname, credno1, roomname, apartmentname, classname, collegename});
+
+					KqDetailItemDTO itemDTO = new KqDetailItemDTO();
+					itemDTO.setRoomName(roomname);
+					itemDTO.setClassName(classname);
+					itemDTO.setCollegeName(collegename);
+					itemDTO.setApartmentName(apartmentname);
+					itemDTO.setStudentName(piname);
+					itemDTO.setStudentNo(credno1);
+					items.add(itemDTO);
+				}
+			}
+			return items;
+		}
+
+	public static List<String> getQjLeaveTypes(){
+		/**
+		 * 个人请假：病假 HOLIDAY_PERSON_ILL = "1";
+
+		 * 个人请假：事假 HOLIDAY_PERSON_ABSENCE = "2";
+		 *
+		 * 个人请假：其他 HOLIDAY_PERSON_OTHER = "4";
+		 *
+		 */
+		List<String> leaveTypes = new ArrayList<>();
+		// 病假
+		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_ILL);
+		// 事假
+		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_ABSENCE);
+		// 其他
+		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_OTHER);
+		return leaveTypes;
+	}
+
+	/**
+	 * 获取实习的leaveTypes
+	 * @return
+	 */
+	public static List<String> getSxLeaveTypes(){
+		List<String> leaveTypes = new ArrayList<>();
+		// 个人请假：实习
+		leaveTypes.add(TypeConstant.HOLIDAY_PERSON_WORK);
+		return leaveTypes;
+	}
 }

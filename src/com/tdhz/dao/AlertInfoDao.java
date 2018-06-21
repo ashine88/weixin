@@ -2,8 +2,11 @@ package com.tdhz.dao;
 
 import java.util.List;
 
+import com.tdhz.dto.KqDetailItemDTO;
+import com.tdhz.dto.KqDetailReqDTO;
 import com.tdhz.pojo.AbnormityInfo;
 import com.tdhz.pojo.AlertInfo;
+import com.tdhz.util.Page;
 import com.tdhz.util.PageBean;
 
 public interface AlertInfoDao {
@@ -30,6 +33,11 @@ public interface AlertInfoDao {
 	 * @return
 	 */
 	List<AlertInfo> findAlertBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer alertType);
+
+	Page<KqDetailItemDTO> getAlertDetailSg(KqDetailReqDTO reqDTO, Page page, Integer alertType);
+
+	Page<KqDetailItemDTO> getAlertDetailAss(KqDetailReqDTO reqDTO, Page page, Integer alertType);
+
 
 	int findAlertCountBySg(Integer userId, Integer roomId, String startTime, String endTime, Integer alertType);
 
